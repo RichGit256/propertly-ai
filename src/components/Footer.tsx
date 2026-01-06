@@ -2,6 +2,7 @@
 
 import { Twitter, Instagram, Linkedin, Mail, MapPin } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
     return (
@@ -10,9 +11,17 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                     {/* Brand */}
                     <div className="col-span-1 md:col-span-2 space-y-4">
-                        <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/60">
+                        <div className="relative h-10 w-40">
+                            <Image
+                                src="/logo-high-res.jpg"
+                                alt="Propertly.ai"
+                                fill
+                                className="object-contain object-left"
+                            />
+                        </div>
+                        <h4 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/60">
                             propertly.ai
-                        </h3>
+                        </h4>
                         <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
                             The advanced AI enhancement suite for modern real estate agents.
                             Turn listing photos into sales with a single click.

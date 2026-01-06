@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
     const { searchParams, origin } = new URL(request.url);
     const code = searchParams.get("code");
-    const next = searchParams.get("next") ?? "/";
+    // const next = searchParams.get("next") ?? "/"; // We ignore 'next' for verification to show the success page first
 
     if (code) {
         const cookieStore = await cookies();
@@ -28,8 +28,17 @@ export async function GET(request: Request) {
             }
         );
         const { error } = await supabase.auth.exchangeCodeForSession(code);
+
         if (!error) {
-            return NextResponse.redirect(`${origin}${next}`);
+            // Success! Redirect to the dedicated success page
+            return NextResponse.redirect(`${origin}/auth/verified`);
+        }
+
+        // If error, check if we actually have a session (user is already verified/logged in)
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            // User is logged in, so they are effectively verified (or it was a duplicate click)
+            return NextResponse.redirect(`${origin}/auth/verified`);
         }
     }
 

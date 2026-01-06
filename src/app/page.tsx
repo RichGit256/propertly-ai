@@ -250,10 +250,10 @@ export default function Home() {
 
   return (
     <>
-      <main className="min-h-screen flex flex-col items-center justify-start pt-32 p-6 bg-background text-foreground overflow-hidden relative">
+      <main className="min-h-screen flex flex-col items-center justify-start pt-20 p-6 bg-background text-foreground overflow-hidden relative">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-foreground/5 via-transparent to-transparent pointer-events-none" />
 
-        <div className="z-10 w-full max-w-5xl space-y-12 text-center">
+        <div className="z-10 w-full max-w-5xl space-y-6 text-center">
 
           {/* Header - Only show in early stages to reduce noise */}
           {(state === "IDLE" || state === "UPLOADING") && (
@@ -262,15 +262,27 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="space-y-4"
+              className="space-y-2 flex flex-col items-center"
             >
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-foreground via-foreground/90 to-foreground/50 pb-2">
-                propertly.ai
-              </h1>
+              <div className="relative h-48 w-48">
+                <Image
+                  src="/logo-high-res.jpg"
+                  alt="Propertly.ai"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-light leading-relaxed">
                 Turn listing photos into leads. AI-powered enhancement that sells homes faster. <br className="hidden md:block" />
                 Declutter, relight, and stage in seconds.
               </p>
+
+              <div className="pt-2">
+                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
+                  ✨ Sign up to get 3 Free Credits
+                </span>
+              </div>
             </motion.div>
           )}
 

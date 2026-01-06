@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { processWithVance } from "@/lib/vance";
+import { processWithPedra } from "@/lib/pedra";
 
 export async function POST(req: NextRequest) {
     try {
@@ -38,7 +38,8 @@ export async function POST(req: NextRequest) {
         const { data: { user } } = await supabase.auth.getUser();
 
         if (!user) {
-            console.log("[API/Enhance] Guest user detected. Proceeding.");
+            console.log("[API/Enhance] Guest user detected. Blocking access.");
+            return NextResponse.json({ error: "Authentication required to use this feature." }, { status: 401 });
         }
 
         // 2. Check User Credits (Only if user is logged in)
@@ -76,42 +77,40 @@ export async function POST(req: NextRequest) {
 
         console.log(`[API/Enhance] User: ${user?.email || "Guest"} | Credits: ${creditsRemaining ?? "N/A"} | Mode: ${mode}`);
 
-
         // 4. AI Processing
         let enhancedUrl: string;
 
-        if (mode === "magic") {
-            // Mock for Magic Mode (or implement specialized coloring later)
-            console.log("[API/Enhance] Magic Mode - using mock.");
-            enhancedUrl = "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2666&auto=format&fit=crop";
-        } else {
-            // STANDARD MODE - Real Vance AI Integration
-            console.log("[API/Enhance] Standard Mode - Calling Vance AI...");
-            try {
-                // Using 'enlarge3' for "Premium" results (Upscale + Denoise + Sharpen).
-                const config = {
-                    name: "enlarge3",
-                    config: {
-                        module: "enlarge3",
-                        module_params: {
-                            model_name: "EnlargeStandard_4x_Stable",
-                            scale: 4, // 4x Upscale
-                            suppress_noise: 100, // Maximized for aggressive cleanup
-                            remove_blur: 100  // Maximized for aggressive sharpening
-                        }
-                    }
-                };
+        try {
+            // Upload to Supabase Storage to get a Public URL for Pedra
+            // This avoids sending massive Base64 strings which can cause 500 errors
+            const fileName = `upload_${Date.now()}_${image.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
+            const arrayBuffer = await image.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
 
-                // We need to import processWithVance. 
-                // Since this is inside the function, we'll let the import be handled at top level, 
-                // but for this block we just call it.
-                // Note: File object from formData works with our service.
-                enhancedUrl = await processWithVance(image, config, supabase); // Passing full config structure + supabase client
+            const { error: uploadError } = await supabase.storage
+                .from('temp-uploads')
+                .upload(fileName, buffer, {
+                    contentType: image.type,
+                    upsert: true
+                });
 
-            } catch (err: any) {
-                console.error("[API/Enhance] Vance AI Error:", err);
-                return NextResponse.json({ error: "Enhancement failed: " + err.message }, { status: 500 });
+            if (uploadError) {
+                console.error("Supabase Upload Error:", uploadError);
+                throw new Error("Failed to upload image for processing");
             }
+
+            const { data: { publicUrl: sourceImageUrl } } = supabase.storage
+                .from('temp-uploads')
+                .getPublicUrl(fileName);
+
+            console.log("[API/Enhance] Uploaded source image to:", sourceImageUrl);
+
+            // Call Pedra with the URL
+            enhancedUrl = await processWithPedra(sourceImageUrl, mode, prompt);
+
+        } catch (err: any) {
+            console.error("[API/Enhance] Pedra AI Error:", err);
+            return NextResponse.json({ error: "Enhancement failed: " + err.message }, { status: 500 });
         }
 
         // 5. Deduct Credit (Only if user is logged in)

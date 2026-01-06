@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase/client";
 import { X, Mail, Lock, ArrowRight, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,8 +30,10 @@ export function AuthModal({ isOpen, onClose, defaultMode = "signin" }: AuthModal
             setError(null);
             setMessage(null);
             setAcceptedTerms(false);
-            // Optionally clear inputs too if desired, but keeping them might be friendly. 
-            // User requested "Sign In form", implying mode reset is key.
+        } else {
+            // Clear sensitive fields on close
+            setEmail("");
+            setPassword("");
         }
     }, [isOpen, defaultMode]);
 
@@ -122,6 +125,16 @@ export function AuthModal({ isOpen, onClose, defaultMode = "signin" }: AuthModal
 
                     <div className="p-8">
                         <div className="text-center mb-8">
+                            <div className="flex justify-center mb-4">
+                                <div className="relative h-12 w-12">
+                                    <Image
+                                        src="/logo-high-res.jpg"
+                                        alt="Propertly.ai"
+                                        fill
+                                        className="object-contain"
+                                    />
+                                </div>
+                            </div>
                             <h2 className="text-2xl font-semibold text-white mb-2">
                                 {mode === "signin" && "Welcome Back"}
                                 {mode === "signup" && "Create Account"}
@@ -129,7 +142,7 @@ export function AuthModal({ isOpen, onClose, defaultMode = "signin" }: AuthModal
                             </h2>
                             <p className="text-sm text-white/50">
                                 {mode === "signin" && "Enter your credentials to access your workspace."}
-                                {mode === "signup" && "Join Propertly.ai to start enhancing images."}
+                                {mode === "signup" && "Join Propertly.ai and get 3 FREE credits instantly."}
                                 {mode === "forgot" && "We'll send you a link to reset your password."}
                             </p>
                         </div>

@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Loader2, Sparkles, X } from "lucide-react";
 import { useState } from "react";
+import { PLANS } from "@/lib/stripe";
 
 interface PaymentModalProps {
     isOpen: boolean;
@@ -67,7 +68,7 @@ export function PaymentModal({ isOpen, onClose, onSuccess }: PaymentModalProps) 
                                 <div className="w-full bg-white/5 rounded-xl p-4 border border-white/5 space-y-3">
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-white/70">Single Enhancement</span>
-                                        <span className="text-white font-medium">$2.99</span>
+                                        <span className="text-white font-medium">{PLANS[0].price}</span>
                                     </div>
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-white/70">Processing Fee</span>
@@ -76,7 +77,7 @@ export function PaymentModal({ isOpen, onClose, onSuccess }: PaymentModalProps) 
                                     <div className="h-px bg-white/10 w-full" />
                                     <div className="flex items-center justify-between text-base">
                                         <span className="text-white font-bold">Total</span>
-                                        <span className="text-white font-bold">$2.99</span>
+                                        <span className="text-white font-bold">{PLANS[0].price}</span>
                                     </div>
                                 </div>
 

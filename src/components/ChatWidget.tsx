@@ -17,7 +17,7 @@ type Message = {
 const FAQ_KNOWLEDGE_BASE = [
     {
         keywords: ["price", "cost", "free", "subscription", "credit", "tier"],
-        answer: "We offer a free tier with 3 credits! You can upgrade to our Pro plan for unlimited enhancements, or buy credit packs starting at $5.",
+        answer: "We offer a free tier with 3 credits! You can upgrade to our Pro plan for unlimited enhancements, or buy single enhancements for just £1.50.",
         action: { label: "View Plans", event: "open-subscription" }
     },
     // ... other items unchanged

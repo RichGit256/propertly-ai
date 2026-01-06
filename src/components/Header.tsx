@@ -1,12 +1,23 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
+
 import AuthButton from "./AuthButton";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function Header() {
     const pathname = usePathname();
     const router = useRouter();
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 10);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     const handleHomeClick = (e: React.MouseEvent) => {
         if (pathname === "/") {
@@ -16,7 +27,12 @@ export default function Header() {
     };
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between pointer-events-none">
+        <header
+            className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between transition-all duration-300 ${scrolled
+                ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm pointer-events-auto"
+                : "bg-transparent pointer-events-none"
+                }`}
+        >
             <Link href="/" onClick={handleHomeClick} className="pointer-events-auto">
                 <h1 className="text-xl font-semibold tracking-tight text-foreground flex items-center gap-2">
                     propertly.ai
