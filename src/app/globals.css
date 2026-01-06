@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+:root {
+  /* Premium Dark Theme Variables - "Apple-quality" */
+  /* Using a deep, rich black/gray scale */
+  --background: #050505;
+  --foreground: #FAFAFA;
+
+  --card: #0A0A0A;
+  --card-foreground: #FAFAFA;
+
+  --popover: #0A0A0A;
+  --popover-foreground: #FAFAFA;
+
+  --primary: #FAFAFA;
+  --primary-foreground: #050505;
+
+  --secondary: #1A1A1A;
+  --secondary-foreground: #FAFAFA;
+
+  --muted: #1A1A1A;
+  --muted-foreground: #A1A1AA;
+
+  --accent: #262626;
+  --accent-foreground: #FAFAFA;
+
+  --destructive: #7F1D1D;
+  --destructive-foreground: #FAFAFA;
+
+  --border: #262626;
+  --input: #262626;
+  --ring: #FAFAFA;
+  /* Crisp focus rings */
+
+  --radius: 0.75rem;
+  /* Smooth rounded corners */
+
+  /* Animation Variables */
+  --liquid-duration: 2s;
+}
+
+.light {
+  --background: #FFFFFF;
+  --foreground: #09090b;
+
+  --card: #FFFFFF;
+  --card-foreground: #09090b;
+
+  --popover: #FFFFFF;
+  --popover-foreground: #09090b;
+
+  --primary: #18181b;
+  --primary-foreground: #FAFAFA;
+
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #FAFAFA;
+
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #18181b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --font-sans: var(--font-geist-sans), "Inter", "sans-serif";
+  --font-mono: var(--font-geist-mono), "monospace";
+
+  /* Custom Animations */
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+
+
+  @keyframes ripple {
+    0% {
+      transform: scale(0.95);
+      opacity: 0.5;
+    }
+
+    100% {
+      transform: scale(1.1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes float-up {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  --animate-shimmer: shimmer 3s linear infinite;
+  --animate-ripple: ripple 1.5s ease-out infinite;
+  --animate-float-up: float-up 0.5s ease-out forwards;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Utilities for Premium Feel */
+.glass {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  background: rgba(30, 30, 30, 0.7);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Ensure Header is always on top */
+header {
+  z-index: 100;
+}
